@@ -1,0 +1,451 @@
+{
+  "info": {
+    "name": "AdStudio - Billing (Dev 5)",
+    "description": "Billing & Reconciliation module endpoints (ClientInvoice + PublisherInvoice + billing calendar).\n\nSet the `token` variable to a JWT from POST /api/auth/login (owned by Dev 1). All requests send Authorization: Bearer {{token}}. Write requests also send X-User-Id: {{userId}} for audit logging (a seam; resolve from the JWT principal once integrated).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Client Invoices (Finance Dashboard)",
+      "item": [
+        {
+          "name": "Create client invoice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/client-invoices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "client-invoices"
+              ]
+            },
+            "description": "Manual creation. Roles: FINANCE, ADMIN.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"advertiserId\": 1,\n  \"campaignBriefId\": 1,\n  \"billingPeriod\": \"2026-05\",\n  \"invoiceAmount\": 1000.0,\n  \"commissionRate\": 0.15\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Generate client invoice from delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/client-invoices/generate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "client-invoices",
+                "generate"
+              ]
+            },
+            "description": "invoiceAmount is computed from approved delivery (BudgetCalculationService). Roles: FINANCE, ADMIN.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"advertiserId\": 1,\n  \"campaignBriefId\": 1,\n  \"billingPeriod\": \"2026-05\",\n  \"commissionRate\": 0.15\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get client invoice",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/client-invoices/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "client-invoices",
+                "1"
+              ]
+            },
+            "description": "Roles: FINANCE, ADMIN, ADVERTISER_BRAND."
+          }
+        },
+        {
+          "name": "List client invoices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/client-invoices?status=ISSUED&page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "client-invoices"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ISSUED"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Paginated. status is optional. Roles: FINANCE, ADMIN, ADVERTISER_BRAND."
+          }
+        },
+        {
+          "name": "Update client invoice (DRAFT only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/client-invoices/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "client-invoices",
+                "1"
+              ]
+            },
+            "description": "Recomputes commercials. Roles: FINANCE, ADMIN.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"campaignBriefId\": 1,\n  \"billingPeriod\": \"2026-05\",\n  \"invoiceAmount\": 1200.0,\n  \"commissionRate\": 0.15\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Change client invoice status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/client-invoices/1/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "client-invoices",
+                "1",
+                "status"
+              ]
+            },
+            "description": "DRAFT->ISSUED->PAID/DISPUTED/OVERDUE. Roles: FINANCE, ADMIN.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ISSUED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Payment summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/client-invoices/summary?advertiserId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "client-invoices",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "advertiserId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Billed / paid / outstanding / overdue rollup. Roles: FINANCE, ADMIN, ADVERTISER_BRAND."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Publisher Invoices",
+      "item": [
+        {
+          "name": "Submit publisher invoice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/publisher-invoices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "publisher-invoices"
+              ]
+            },
+            "description": "Publisher Portal invoice submission. Roles: PUBLISHER, ADMIN.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"publisherId\": 5,\n  \"ioId\": 9,\n  \"invoiceAmount\": 1000.0,\n  \"receivedDate\": \"2026-05-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get publisher invoice",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/publisher-invoices/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "publisher-invoices",
+                "1"
+              ]
+            },
+            "description": "Roles: PUBLISHER, FINANCE, ADMIN."
+          }
+        },
+        {
+          "name": "List publisher invoices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/publisher-invoices?publisherId=5&status=RECEIVED&page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "publisher-invoices"
+              ],
+              "query": [
+                {
+                  "key": "publisherId",
+                  "value": "5"
+                },
+                {
+                  "key": "status",
+                  "value": "RECEIVED"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Paginated. publisherId/status optional. Roles: PUBLISHER, FINANCE, ADMIN."
+          }
+        },
+        {
+          "name": "Reconcile publisher invoice",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/publisher-invoices/1/reconcile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "publisher-invoices",
+                "1",
+                "reconcile"
+              ]
+            },
+            "description": "Computes deliveredValue + variance, sets RECONCILED or DISCREPANCY. Roles: FINANCE, ADMIN."
+          }
+        },
+        {
+          "name": "Change publisher invoice status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/publisher-invoices/1/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "publisher-invoices",
+                "1",
+                "status"
+              ]
+            },
+            "description": "RECEIVED->RECONCILED/DISCREPANCY; RECONCILED->PAID. Roles: FINANCE, ADMIN.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PAID\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Billing Calendar",
+      "item": [
+        {
+          "name": "Billing calendar by month",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/invoices/calendar?month=2026-05",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "invoices",
+                "calendar"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "2026-05"
+                }
+              ]
+            },
+            "description": "Invoices issued in the month (YYYY-MM). Roles: FINANCE, ADMIN, ADVERTISER_BRAND."
+          }
+        }
+      ]
+    }
+  ]
+}
