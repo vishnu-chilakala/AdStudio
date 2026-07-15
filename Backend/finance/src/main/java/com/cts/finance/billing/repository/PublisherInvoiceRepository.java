@@ -1,7 +1,7 @@
-package com.cts.finance.billing.repository;
+package com.cts.adstudio.finance.billing.repository;
 
-import com.cts.finance.billing.entity.PublisherInvoice;
-import com.cts.finance.billing.enums.PublisherInvoiceStatus;
+import com.cts.adstudio.finance.billing.entity.PublisherInvoice;
+import com.cts.adstudio.finance.billing.enums.PublisherInvoiceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

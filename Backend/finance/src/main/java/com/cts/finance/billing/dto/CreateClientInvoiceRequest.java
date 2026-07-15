@@ -1,4 +1,4 @@
-package com.cts.finance.billing.dto;
+package com.cts.adstudio.finance.billing.dto;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

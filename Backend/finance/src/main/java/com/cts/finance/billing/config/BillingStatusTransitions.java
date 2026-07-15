@@ -1,8 +1,8 @@
-package com.cts.finance.billing.config;
+package com.cts.adstudio.finance.billing.config;
 
-import com.cts.finance.billing.enums.ClientInvoiceStatus;
-import com.cts.finance.billing.enums.PublisherInvoiceStatus;
-import com.cts.finance.shared.StatusTransitionValidator;
+import com.cts.adstudio.finance.billing.enums.ClientInvoiceStatus;
+import com.cts.adstudio.finance.billing.enums.PublisherInvoiceStatus;
+import com.cts.adstudio.finance.shared.StatusTransitionValidator;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
-package com.cts.finance.billing.dto;
+package com.cts.adstudio.finance.billing.dto;
 
-import com.cts.finance.billing.entity.ClientInvoice;
+import com.cts.adstudio.finance.billing.entity.ClientInvoice;
 
 import java.math.BigDecimal;
 import java.time.Instant;

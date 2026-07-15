@@ -1,6 +1,6 @@
-package com.cts.finance.billing.entity;
+package com.cts.adstudio.finance.billing.entity;
 
-import com.cts.finance.billing.enums.PublisherInvoiceStatus;
+import com.cts.adstudio.finance.billing.enums.PublisherInvoiceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,7 +45,7 @@ public class PublisherInvoice {
     @Builder.Default
     private BigDecimal varianceAmount = BigDecimal.ZERO;
 
-    private LocalDate receivedDate;
+    private LocalDate receivedDate;// This stores the date when the invoice was received from the publisher.
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

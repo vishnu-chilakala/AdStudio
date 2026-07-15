@@ -1,6 +1,6 @@
-package com.cts.finance.billing.entity;
+package com.cts.adstudio.finance.billing.entity;
 
-import com.cts.finance.billing.enums.ClientInvoiceStatus;
+import com.cts.adstudio.finance.billing.enums.ClientInvoiceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,36 +25,48 @@ import java.time.LocalDate;
 @Builder
 public class ClientInvoice {
 
-    @Id
+    @Id // this is for Primary Key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //  This is the unique ID of each invoice. It auto-increments in the database
+
     private Long id;
 
     @Column(nullable = false)
-    private Long advertiserId;          // FK -> advertiser.id
+    private Long advertiserId;          // FK -> advertiser.id /*We only store the ID of advertiser and campaign, not full objects, to keep the module simple and independent.
 
-    private Long campaignBriefId;       // FK -> campaign_brief.id
+    private Long campaignBriefId;       // FK -> campaign_brief.id */
 
     @Column(length = 20)
-    private String billingPeriod;       // e.g. "2026-05"
+    private String billingPeriod;       // e.g. "2026-06"  Stores month like "2026-06"
+
+    //  Money Fields
+    @Column(nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal invoiceAmount = BigDecimal.ZERO; // These store money values
 
     @Column(nullable = false, precision = 15, scale = 2)
     @Builder.Default
-    private BigDecimal invoiceAmount = BigDecimal.ZERO;
+    private BigDecimal agencyCommission = BigDecimal.ZERO;// We use BigDecimal instead of double to avoid calculation errors in money
 
     @Column(nullable = false, precision = 15, scale = 2)
     @Builder.Default
-    private BigDecimal agencyCommission = BigDecimal.ZERO;
+    private BigDecimal netBillable = BigDecimal.ZERO;//  If no value is given → default = 0. Prevents errors (no null values)
 
-    @Column(nullable = false, precision = 15, scale = 2)
-    @Builder.Default
-    private BigDecimal netBillable = BigDecimal.ZERO;
+    //
+    private LocalDate issuedDate;// Stores when invoice was created (only date, no time)
 
-    private LocalDate issuedDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20)/* Stores invoice status like:
+
+                                                    DRAFT
+                                                    PAID
+                                                    CANCELLED
+
+💡                                                 Stored as text in DB, not numbers → easier to read and safer*/
     @Builder.Default
     private ClientInvoiceStatus status = ClientInvoiceStatus.DRAFT;
+
 
     @CreationTimestamp
     @Column(updatable = false)

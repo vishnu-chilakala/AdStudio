@@ -1,4 +1,4 @@
-package com.cts.finance.shared;
+package com.cts.adstudio.finance.shared;
 
 import java.math.BigDecimal;
 

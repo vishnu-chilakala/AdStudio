@@ -1,6 +1,6 @@
-package com.cts.finance.billing.dto;
+package com.cts.adstudio.finance.billing.dto;
 
-import com.cts.finance.billing.entity.PublisherInvoice;
+import com.cts.adstudio.finance.billing.entity.PublisherInvoice;
 
 import java.math.BigDecimal;
 

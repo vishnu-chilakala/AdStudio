@@ -1,6 +1,6 @@
-package com.cts.finance.billing.integration;
+package com.cts.adstudio.finance.billing.integration;
 
-import com.cts.finance.shared.AuditLogService;
+import com.cts.adstudio.finance.shared.AuditLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

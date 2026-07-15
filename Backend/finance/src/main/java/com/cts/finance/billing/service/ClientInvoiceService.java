@@ -1,15 +1,16 @@
-package com.cts.finance.billing.service;
+package com.cts.adstudio.finance.billing.service;
 
-import com.cts.finance.billing.dto.*;
-import com.cts.finance.billing.entity.ClientInvoice;
-import com.cts.finance.billing.enums.ClientInvoiceStatus;
-import com.cts.finance.billing.exception.BillingRuleException;
-import com.cts.finance.billing.exception.InvoiceNotFoundException;
-import com.cts.finance.billing.repository.ClientInvoiceRepository;
-import com.cts.finance.shared.AuditLogService;
-import com.cts.finance.shared.BudgetCalculationService;
-import com.cts.finance.shared.StatusTransitionValidator;
+import com.cts.adstudio.finance.billing.dto.*;
+import com.cts.adstudio.finance.billing.entity.ClientInvoice;
+import com.cts.adstudio.finance.billing.enums.ClientInvoiceStatus;
+import com.cts.adstudio.finance.billing.exception.BillingRuleException;
+import com.cts.adstudio.finance.billing.exception.InvoiceNotFoundException;
+import com.cts.adstudio.finance.billing.repository.ClientInvoiceRepository;
+import com.cts.adstudio.finance.shared.AuditLogService;
+import com.cts.adstudio.finance.shared.BudgetCalculationService;
+import com.cts.adstudio.finance.shared.StatusTransitionValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ import java.util.List;
  * If the agency works on a commission-inclusive basis instead, change
  * {@link #computeCommercials} to subtract. Default rate is {@link #DEFAULT_COMMISSION_RATE}.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClientInvoiceService {
@@ -66,6 +69,7 @@ public class ClientInvoiceService {
     @Transactional
     public ClientInvoiceResponse create(CreateClientInvoiceRequest req, Long actingUserId) {
         BigDecimal[] c = computeCommercials(req.invoiceAmount(), req.commissionRate());
+        log.info("commission rate calculation: {}", Arrays.toString(c));
         ClientInvoice invoice = ClientInvoice.builder()
                 .advertiserId(req.advertiserId())
                 .campaignBriefId(req.campaignBriefId())
@@ -169,7 +173,7 @@ public class ClientInvoiceService {
 
     // ---- helpers -------------------------------------------------------------
 
-    /** Returns [agencyCommission, netBillable]. */
+    /** Returns [agencyCommission, netBillable]. */  // 1000 rupees               0.2 = 20% of commision
     private BigDecimal[] computeCommercials(BigDecimal invoiceAmount, BigDecimal commissionRate) {
         BigDecimal rate = (commissionRate == null) ? DEFAULT_COMMISSION_RATE : commissionRate;
         BigDecimal commission = invoiceAmount.multiply(rate).setScale(2, RoundingMode.HALF_UP);

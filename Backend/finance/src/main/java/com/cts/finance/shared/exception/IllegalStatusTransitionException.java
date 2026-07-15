@@ -1,4 +1,4 @@
-package com.cts.finance.shared.exception;
+package com.cts.adstudio.finance.shared.exception;
 
 import org.springframework.http.HttpStatus;
 

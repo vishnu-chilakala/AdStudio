@@ -1,7 +1,7 @@
-package com.cts.finance.billing.repository;
+package com.cts.adstudio.finance.billing.repository;
 
-import com.cts.finance.billing.entity.ClientInvoice;
-import com.cts.finance.billing.enums.ClientInvoiceStatus;
+import com.cts.adstudio.finance.billing.entity.ClientInvoice;
+import com.cts.adstudio.finance.billing.enums.ClientInvoiceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,18 +19,20 @@ public interface ClientInvoiceRepository extends JpaRepository<ClientInvoice, Lo
     Page<ClientInvoice> findByAdvertiserId(Long advertiserId, Pageable pageable);
 
     /** Billing calendar: invoices issued within a date window. */
-    List<ClientInvoice> findByIssuedDateBetween(LocalDate start, LocalDate end);
+    List<ClientInvoice> findByIssuedDateBetween(LocalDate start, LocalDate end);// Get all invoices issued between Jan 1 and Jan 31
 
     /** Payment-tracking aggregate: total net billable for an advertiser in a given status. */
+    //Calculates total net billable amount for A specific advertiser (unpaid bill )
     @Query("""
             select coalesce(sum(c.netBillable), 0)
             from ClientInvoice c
             where c.advertiserId = :advertiserId and c.status = :status
-            """)
+            """)// coalesce(..., 0) → returns 0 instead of null if no records exist
     BigDecimal sumNetBillableByAdvertiserAndStatus(@Param("advertiserId") Long advertiserId,
                                                    @Param("status") ClientInvoiceStatus status);
 
     /** Payment-tracking aggregate: total net billable across all statuses for an advertiser. */
+
     @Query("""
             select coalesce(sum(c.netBillable), 0)
             from ClientInvoice c

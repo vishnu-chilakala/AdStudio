@@ -1,6 +1,6 @@
-package com.cts.finance.shared;
+package com.cts.adstudio.finance.shared;
 
-import com.cts.finance.shared.exception.IllegalStatusTransitionException;
+import com.cts.adstudio.finance.shared.exception.IllegalStatusTransitionException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Part of this service's common layer (could be extracted to a shared library).
  * Billing registers its invoice state machines into it at startup.
  */
-@Component
+@Component("financeStatusTransitionValidator")
 public class StatusTransitionValidator {
 
     // enumType -> (currentName -> allowed target names)

@@ -1,6 +1,6 @@
-package com.cts.finance.billing.integration;
+package com.cts.adstudio.finance.billing.integration;
 
-import com.cts.finance.shared.BudgetCalculationService;
+import com.cts.adstudio.finance.shared.BudgetCalculationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;

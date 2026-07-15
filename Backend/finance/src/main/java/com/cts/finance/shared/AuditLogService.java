@@ -1,4 +1,4 @@
-package com.cts.finance.shared;
+package com.cts.adstudio.finance.shared;
 
 /**
  * Shared audit hook (Backend Plan §7 Day 3). Every financial / state-changing

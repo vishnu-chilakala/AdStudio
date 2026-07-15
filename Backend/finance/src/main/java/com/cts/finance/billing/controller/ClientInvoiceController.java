@@ -1,11 +1,12 @@
-package com.cts.finance.billing.controller;
+package com.cts.adstudio.finance.billing.controller;
 
-import com.cts.finance.billing.dto.*;
-import com.cts.finance.billing.enums.ClientInvoiceStatus;
-import com.cts.finance.billing.service.ClientInvoiceService;
-import com.cts.finance.shared.ApiResponse;
+import com.cts.adstudio.finance.billing.dto.*;
+import com.cts.adstudio.finance.billing.enums.ClientInvoiceStatus;
+import com.cts.adstudio.finance.billing.service.ClientInvoiceService;
+import com.cts.adstudio.finance.shared.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.util.List;
  * actingUserId is taken from the X-User-Id header as a seam for audit logging;
  * in the integrated app, resolve it from the JWT principal (SecurityContext).
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/client-invoices")
 @RequiredArgsConstructor
@@ -31,18 +33,19 @@ public class ClientInvoiceController {
 
     private final ClientInvoiceService service;
 
-    @PostMapping
+    @PostMapping//create() → manual invoice creation
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('FINANCE','ADMIN')")
+    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
     public ApiResponse<ClientInvoiceResponse> create(
             @Valid @RequestBody CreateClientInvoiceRequest req,
-            @RequestHeader(value = "X-User-Id", required = false) Long actingUserId) {
+            @RequestHeader(value = "Acting-User-Id-Finance", required = false) Long actingUserId) {
+        log.info("Received CreateClientInvoiceRequest: {}", req);
         return ApiResponse.ok(service.create(req, actingUserId), "Client invoice created");
     }
 
-    @PostMapping("/generate")
+    @PostMapping("/generate")// generate() → auto-generate invoice from delivery data
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('FINANCE','ADMIN')")
+    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
     public ApiResponse<ClientInvoiceResponse> generate(
             @Valid @RequestBody GenerateClientInvoiceRequest req,
             @RequestHeader(value = "X-User-Id", required = false) Long actingUserId) {
@@ -51,21 +54,21 @@ public class ClientInvoiceController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('FINANCE','ADMIN','ADVERTISER_BRAND')")
+    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN','BRAND_ADVERTISER')")
     public ApiResponse<ClientInvoiceResponse> get(@PathVariable Long id) {
         return ApiResponse.ok(service.get(id));
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('FINANCE','ADMIN','ADVERTISER_BRAND')")
+    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN','BRAND_ADVERTISER')")
     public ApiResponse<List<ClientInvoiceResponse>> list(
-            @RequestParam(required = false) ClientInvoiceStatus status,
+            @RequestParam(required = false) ClientInvoiceStatus status, // ClientInvoiceStatus - enum
             @PageableDefault(size = 20) Pageable pageable) {
         return ApiResponse.page(service.list(status, pageable), "Client invoices");
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('FINANCE','ADMIN')")
+    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
     public ApiResponse<ClientInvoiceResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateClientInvoiceRequest req,
@@ -74,7 +77,7 @@ public class ClientInvoiceController {
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('FINANCE','ADMIN')")
+    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
     public ApiResponse<ClientInvoiceResponse> changeStatus(
             @PathVariable Long id,
             @Valid @RequestBody ChangeStatusRequest req,
@@ -84,7 +87,7 @@ public class ClientInvoiceController {
     }
 
     @GetMapping("/summary")
-    @PreAuthorize("hasAnyRole('FINANCE','ADMIN','ADVERTISER_BRAND')")
+    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN','BRAND_ADVERTISER')")
     public ApiResponse<PaymentSummaryResponse> paymentSummary(@RequestParam Long advertiserId) {
         return ApiResponse.ok(service.paymentSummary(advertiserId), "Payment summary");
     }
