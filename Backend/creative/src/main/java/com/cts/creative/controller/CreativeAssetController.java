@@ -1,13 +1,14 @@
 package com.cts.creative.controller;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.cts.creative.entity.CreativeAsset;
 import com.cts.creative.service.CreativeService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/creative-assets")
@@ -16,25 +17,100 @@ public class CreativeAssetController {
 
     private final CreativeService service;
 
-    // ✅ ONLY UPLOAD HERE ✅
-    @PostMapping(value = "/upload", consumes = "multipart/form-data")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(
-            @RequestParam("file") MultipartFile file,
+
+            @RequestParam("file")
+            MultipartFile file,
+
             @RequestParam Long brandId,
+
+            @RequestParam Long campaignBriefId,
+
             @RequestParam String assetName,
+
+            @RequestParam Long uploadedById,
+
             @RequestParam CreativeAsset.AssetType assetType,
+
             @RequestParam Integer width,
+
             @RequestParam Integer height
+
     ) throws Exception {
 
         return ResponseEntity.ok(
-                service.uploadManual(file, brandId, assetName, assetType, width, height)
+                service.upload(
+                        file,
+                        brandId,
+                        campaignBriefId,
+                        assetName,
+                        uploadedById,
+                        assetType,
+                        width,
+                        height
+                )
         );
     }
 
-    // ✅ GET ALL
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(service.getAll());
+
+        return ResponseEntity.ok(
+                service.getAllAssets()
+        );
+    }
+
+    @GetMapping("/{assetId}")
+    public ResponseEntity<?> getById(
+            @PathVariable Long assetId) {
+
+        return ResponseEntity.ok(
+                service.getAsset(assetId)
+        );
+    }
+
+    @PutMapping(
+            value = "/{assetId}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<?> update(
+
+            @PathVariable Long assetId,
+
+            @RequestParam(required = false)
+            MultipartFile file,
+
+            @RequestParam String assetName,
+
+            @RequestParam CreativeAsset.AssetType assetType,
+
+            @RequestParam Integer width,
+
+            @RequestParam Integer height
+
+    ) throws Exception {
+
+        return ResponseEntity.ok(
+                service.updateAsset(
+                        assetId,
+                        file,
+                        assetName,
+                        assetType,
+                        width,
+                        height
+                )
+        );
+    }
+
+    @DeleteMapping("/{assetId}")
+    public ResponseEntity<?> delete(
+            @PathVariable Long assetId) {
+
+        service.deleteAsset(assetId);
+
+        return ResponseEntity.ok(
+                "Asset Deleted Successfully"
+        );
     }
 }

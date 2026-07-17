@@ -1,8 +1,8 @@
-package com.cts.delivery.deliveryconfig;
+package com.cts.creative.creativeconfig;
 
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DeliveryConfig {
-    
+public class OpenApiConfig {
+
 }

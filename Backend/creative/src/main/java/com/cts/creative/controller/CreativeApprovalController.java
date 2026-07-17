@@ -1,13 +1,13 @@
 package com.cts.creative.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import com.cts.creative.dto.ApprovalRequest;
 import com.cts.creative.service.CreativeService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/creative-approvals")
@@ -16,12 +16,18 @@ public class CreativeApprovalController {
 
     private final CreativeService service;
 
-    // ✅ ONLY APPROVAL API ✅
-    @PostMapping
-    public ResponseEntity<?> approve(@Valid @RequestBody ApprovalRequest req) {
+    @PutMapping("/{assetId}/decision")
+    public ResponseEntity<?> approve(
+
+            @PathVariable Long assetId,
+
+            @Valid
+            @RequestBody
+            ApprovalRequest request) {
 
         return ResponseEntity.ok(
-                service.approve(req.assetId(), req.decision())
-        );
+                service.approveAsset(
+                        assetId,
+                        request));
     }
 }

@@ -1,13 +1,13 @@
 package com.cts.creative.controller;
 
-import com.cts.creative.dto.LinkRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.cts.creative.dto.AssetLinkRequest;
 import com.cts.creative.service.CreativeService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/asset-links")
@@ -17,10 +17,13 @@ public class AssetLinkController {
     private final CreativeService service;
 
     @PostMapping
-    public ResponseEntity<?> link(@Valid @RequestBody LinkRequest req) {
+    public ResponseEntity<?> createLink(
+
+            @Valid
+            @RequestBody
+            AssetLinkRequest request) {
 
         return ResponseEntity.ok(
-                service.link(req.assetId(), req.lineItemId())
-        );
+                service.linkAsset(request));
     }
 }
