@@ -31,13 +31,13 @@ public class DataInitializer {
                 User admin = User.builder()
                         .name("System Administrator")
                         .email(adminEmail)
-                        .password(passwordEncoder.encode("Admin@123"))
+                        .password(passwordEncoder.encode("password"))
                         .phone("0000000000")
                         .role(Role.ADMIN)
                         .status(UserStatus.ACTIVE)
                         .build();
                 userRepository.save(admin);
-                log.warn("Seeded default ADMIN [{}] with password 'Admin@123' - CHANGE THIS IMMEDIATELY.", adminEmail);
+                log.warn("Seeded default ADMIN [{}] with password 'password' - CHANGE THIS IMMEDIATELY.", adminEmail);
             }
         };
     }

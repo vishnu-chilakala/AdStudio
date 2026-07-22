@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: apigateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: iam
+              uri: lb://iam
+              predicates:
+                - Path=/api/auth/**,/api/audit-logs/**
+            - id: advertiser
+              uri: lb://advertiser
+              predicates:
+                - Path=/api/target-audiences/**,/api/campaign-briefs/**,/api/brands/**,/api/advertisers/**
+            - id: creative
+              uri: lb://creative
+              predicates:
+                - Path=/api/creative-assets/**,/api/creative-approvals/**,/api/asset-links/**
+            - id: delivery
+              uri: lb://delivery
+              predicates:
+                - Path=/api/delivery/**
+            - id: finance
+              uri: lb://finance
+              predicates:
+                - Path=/api/finance/**
+            - id: mediaplan
+              uri: lb://mediaplan
+              predicates:
+                - Path=/api/mediaplan/**
+            - id: notification
+              uri: lb://notification
+              predicates:
+                - Path=/api/notification/**
+
+server:
+  port: 9090
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: IAM
+        url: /v3/api-docs
+      - name: Advertiser
+        url: /v3/api-docs
+      - name: Creative
+        url: /v3/api-docs
+      - name: Delivery
+        url: /v3/api-docs
+      - name: Finance
+        url: /v3/api-docs
+      - name: MediaPlan
+        url: /v3/api-docs
+      - name: Notification
+        url: /v3/api-docs

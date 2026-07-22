@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +31,7 @@ public class TargetAudienceController {
     private final TargetAudienceService targetAudienceService;
 
     // POST /api/target-audience - creates a new target audience record
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PostMapping
     public ResponseEntity<ApiResponse<TargetAudienceResponse>> createTargetAudience(@Valid @RequestBody TargetAudienceRequest request) {
 
@@ -43,7 +43,7 @@ public class TargetAudienceController {
     }
 
     // GET /api/target-audience - returns all target audience records
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<TargetAudienceResponse>>> getAllTargetAudiences() {
 
@@ -54,7 +54,7 @@ public class TargetAudienceController {
     }
 
     // GET /api/target-audience/{id} - returns one target audience record by ID
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<TargetAudienceResponse>> getTargetAudienceById(@PathVariable Integer id) {
 
@@ -65,7 +65,7 @@ public class TargetAudienceController {
     }
 
     // GET /api/target-audience/brief/{briefId} - returns all target audience for a specific brief
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping("/brief/{briefId}")
     public ResponseEntity<ApiResponse<List<TargetAudienceResponse>>> getAllAudiencesByBriefId(@PathVariable Integer briefId) {
 
@@ -76,7 +76,7 @@ public class TargetAudienceController {
     }
 
     // PUT /api/target-audience/{id} - updates an existing target audience record
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<TargetAudienceResponse>> updateTargetAudience(@PathVariable Integer id, @Valid @RequestBody TargetAudienceRequest request) {
 
@@ -87,7 +87,7 @@ public class TargetAudienceController {
     }
 
     // DELETE /api/target-audience/{id} - deletes a target audience record
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteTargetAudience(@PathVariable Integer id) {
 

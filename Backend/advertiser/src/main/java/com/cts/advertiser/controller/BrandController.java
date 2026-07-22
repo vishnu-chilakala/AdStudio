@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +31,7 @@ public class BrandController {
     private final BrandService brandService;
 
     // POST /api/brands - creates a new brand
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PostMapping
     public ResponseEntity<ApiResponse<BrandResponse>> createBrand(@Valid @RequestBody BrandRequest request) {
 
@@ -42,7 +42,7 @@ public class BrandController {
     }
 
     // GET /api/brands - returns all brands
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<BrandResponse>>> getAllBrands() {
 
@@ -53,7 +53,7 @@ public class BrandController {
     }
 
     // GET /api/brands/{id} - returns one brand by ID
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BrandResponse>> getBrandById(@PathVariable Integer id) {
 
@@ -64,7 +64,7 @@ public class BrandController {
     }
 
     // GET /api/brands/advertiser/{advertiserId} - returns all brands for a specific advertiser
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping("/advertiser/{advertiserId}")
     public ResponseEntity<ApiResponse<List<BrandResponse>>> getAllBrandsByAdvertiserId(@PathVariable Integer advertiserId) {
 
@@ -75,7 +75,7 @@ public class BrandController {
     }
 
     // PUT /api/brands/{id} - updates an existing brand
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<BrandResponse>> updateBrand(
         @PathVariable Integer id,
@@ -88,7 +88,7 @@ public class BrandController {
         }
 
     // DELETE /api/brands/{id} - deletes a brand
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteBrand(@PathVariable Integer id) {
         
