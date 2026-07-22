@@ -1,0 +1,229 @@
+{
+  // Step :1 - create all 6 typed roles-users
+  // 1 admin created by default anyways
+
+ "identity & Access portal 2 ": // /api/auth/register
+  {
+  "name": "puma advertiser",
+  "email": "advertiser@puma.com",
+  "password": "password",
+  "phone": "9999999999",
+  "role": "BRAND_ADVERTISER",
+  "status": "ACTIVE"
+},
+
+
+  "identity & Access portal 3 ": // /api/auth/register
+{
+  "name": "adstudio publisher",
+  "email": "publisher@adstudio.com",
+  "password": "password",
+  "phone": "9991199911",
+  "role": "DELIVERY_PUBLISHER",
+  "status": "ACTIVE"
+},
+  "identity & Access portal. 4 " :
+  {
+  "name": "finance manager",
+  "email": "financer@adstudio.com",
+  "password": "password",
+  "phone": "9991199911",
+  "role": "FINANCE_EXECUTIVE",
+  "status": "ACTIVE"
+},
+  "identity & Access portal. 5 " :
+{
+  "name": "media planner",
+  "email": "mediaplanner@adstudio.com",
+  "password": "password",
+  "phone": "9991199911",
+  "role": "MEDIA_PLANNER",
+  "status": "ACTIVE"
+},
+  "identity & Access portal . 6 " :
+{
+  "name": "creative manager",
+  "email": "creative@adstudio.com",
+  "password": "password",
+  "phone": "9991199911",
+  "role": "CREATIVE_MANAGER",
+  "status": "ACTIVE"
+},
+  // log in advertiser & copy token
+  "identity & Access portal . -- " :
+  // /api/auth/login
+  {
+    "email": "advertiser@puma.com",
+    "password": "password"
+  },
+
+// ------===============-----------------================------------===========--------
+// step : 2 - Set up brand and budget   //Advertiser portal
+
+  // paste token and authorize
+
+  "Advertiser & Campaign Portal " :
+  // POST : /api/brands
+  {
+    "advertiserId": 2,
+    "brandName": "puma",
+    "category": "shoes",
+    "allocatedBudget": 2000,
+    "currency": "dollar"
+  },
+
+  // ------===============-----------------================------------===========--------
+  // step : 3 - Submit a campaign brief   //Goal, audience, dates, budget — Advertiser service
+
+  "Advertiser & Campaign Portal . " :
+  // POST : /api/campaign-briefs
+  {
+    "brandId": 1,
+    "campaignName": "puma-shoe-ad",
+    "objective": "Awareness",
+    "targetDemographic": "city",
+    "geography": "india",
+    "startDate": "2026-06-17",
+    "endDate": "2026-06-26",
+    "totalBudget": 1000,
+    "channelPreferences": "instagram",
+    "submittedById": 2
+  },
+  // ------===============-----------------================------------===========--------
+  // step : 4 - Brief reviewed and approved   //Account manager approves it — Advertiser service
+
+  "Advertiser & Campaign Portal  " :{},
+  // PUT : /api/campaign-briefs/{id}/status
+  "id" : 1,
+  "status" : "Approved",
+
+  // ------===============-----------------================------------===========--------
+  // step : 5 - Build the media plan   //Channels, line items, CPM — Media plan service
+
+  // log in to mediaplanner account at IAM
+  // authorize at media-planner module of swagger BY pasting token
+  "Media Plan Portal  " :
+  // POST : /api/media-plans
+  {
+    "briefId": 1,
+    "plannerId": 7,
+    "totalBudgetAllocated": 500,
+    "channelMix": "instagram",
+    "startDate": "2026-06-17",
+    "endDate": "2026-06-26"
+  },
+  "Media Plan Portal   " :
+  // POST : /api/media-plans/{planId}/line-items
+  {
+    "planId" : 1,
+
+     "body part" :
+     {
+       "channel": "Social",
+       "publisher": "puma",
+       "format": "video",
+       "plannedImpressions": 32,
+       "plannedBudget": 200,
+       "cpm": 6,
+       "flightStart": "2026-06-17",
+       "flightEnd": "2026-06-26"
+     }
+},
+
+
+  // ------===============-----------------================------------===========--------
+  // step : 6 Upload and approve ad creatives //  Designs reviewed and signed off — Creative service
+  // log in to creative role account at IAM
+  // authorize by pasting jwt token
+   "Creative Portal":
+   // POST : /api/creative-assets/upload
+   {
+     "brandId" : 1,
+     "assetName" : "shoe-photo",
+     "assetType" : "Image",
+     "width" : 16,
+     "height" : 9
+     // files : upload image
+   },
+  "Creative Portal ":
+  // POST : /api/creative-approvals
+  {
+    "assetId": 1,
+    "decision": "Approved"
+  },
+  // ------===============-----------------================------------===========--------
+  // step : 7 - Send orders; publisher confirms   //Insertion orders to publishers — Media plan service
+  // log in to publisher
+  "Media Plan ":
+  // POST : /api/insertion-orders
+  {
+    "lineItemId": 1,
+    "publisherId": 3,
+    "orderDate": "2026-06-17",
+    "startDate": "2026-06-17",
+    "endDate": "2026-06-26",
+    "committedImpressions": 6,
+    "orderValue": 100
+  },
+  "Media Plan . ":
+  // Post : /api/insertion-orders/{id}/status
+  {
+    "id" : 1,
+    "body" :
+    {
+      "status": "Confirmed"
+    }
+
+  },
+
+  // ------===============-----------------================------------===========--------
+  // step : 8 Ads run; delivery is recorded   //Impressions, clicks, spend logged — Creative service
+   // log into delivery publisher role account
+  // authorize the JWT token
+  "Delivery & performance ":
+  // Post : /api/delivery/records
+  {
+    "lineItemId": 1,
+    "ioId": 1,
+    "campaignBriefId": 1,
+    "reportingDate": "2026-06-17",
+    "deliveredImpressions": 10,
+    "clicks": 5,
+    "spend": 100,
+    "source": "PublisherReport",
+    "status": "Accepted"
+  },
+
+  // ------===============-----------------================------------===========--------
+  // step : 9 Billing, reconciliation, reports
+  //Invoice client, pay publishers — Finance service
+
+  // log in and authorize as publisher @ finance and billing
+  "Finance Billing ":
+  // Post : /api/publisher-invoices
+  {
+    "X-User-Id": 1,
+    "body" :
+    {
+      "publisherId": 3,
+      "ioId": 1,
+      "invoiceAmount": 200,
+      "receivedDate": "2026-06-17"
+    }
+  },
+  // log in and authorize as financer @ finance and billing
+  "Finance Billing  " :
+  // Post :   /api/client-invoices/generate
+  {
+    "X-User-Id": 1,
+    "body":
+    {
+      "advertiserId": 4,
+      "campaignBriefId": 1,
+      "billingPeriod": "day",
+      "commissionRate": 0.5
+    }
+
+  }
+
+}

@@ -13,11 +13,11 @@ spring:
             - id: advertiser
               uri: lb://advertiser
               predicates:
-                - Path=/api/advertiser/**
+                - Path=/api/target-audiences/**,/api/campaign-briefs/**,/api/brands/**,/api/advertisers/**
             - id: creative
               uri: lb://creative
               predicates:
-                - Path=/api/creative/**
+                - Path=/api/creative-assets/**,/api/creative-approvals/**,/api/asset-links/**
             - id: delivery
               uri: lb://delivery
               predicates:
