@@ -116,6 +116,16 @@ public class SecurityConfig {
                         .pathMatchers("/api/target-audiences/**")
                         .hasAnyRole("BRAND_ADVERTISER", "ADMIN")
 
+                                // =============================================
+                                // CREATIVE MODULE
+                                // - CREATIVE_MANAGER, ADMIN
+                                // =============================================
+                                .pathMatchers(
+                                        "/api/creative-assets/**",
+                                        "/api/creative-approvals/**",
+                                        "/api/asset-links/**"
+                                )
+                                .hasAnyRole("CREATIVE_MANAGER", "ADMIN")
 
 
                         // =============================================
