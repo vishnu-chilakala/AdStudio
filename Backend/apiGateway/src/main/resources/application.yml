@@ -9,7 +9,7 @@ spring:
             - id: iam
               uri: lb://iam
               predicates:
-                - Path=/api/auth/**
+                - Path=/api/auth/**,/api/audit-logs/**
             - id: advertiser
               uri: lb://advertiser
               predicates:
