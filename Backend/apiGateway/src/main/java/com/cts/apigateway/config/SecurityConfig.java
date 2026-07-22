@@ -76,10 +76,46 @@ public class SecurityConfig {
 
                             // =============================================
                             // AUDIT LOG SERVICE (/api/audit-logs/**)
-                            // - Admin only
+                            // - ADMIN only
                             // =============================================
                                 .pathMatchers("/api/audit-logs/**")
                                 .hasRole("ADMIN")
+                        // =============================================
+                    // ADVERTISER
+                    // =============================================
+                        .pathMatchers(HttpMethod.GET, "/api/advertisers/**")
+                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+                        .pathMatchers("/api/advertisers/**")
+                        .hasAnyRole("BRAND_ADVERTISER", "ADMIN")
+
+                // =============================================
+                // BRAND
+                // =============================================
+                        .pathMatchers(HttpMethod.GET, "/api/brands/**")
+                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+                        .pathMatchers("/api/brands/**")
+                        .hasAnyRole("BRAND_ADVERTISER", "ADMIN")
+
+                // =============================================
+                // CAMPAIGN BRIEF
+                // =============================================
+                        .pathMatchers(HttpMethod.GET, "/api/campaign-briefs/**")
+                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+                        .pathMatchers(HttpMethod.POST,
+                                "/api/campaign-briefs/*/decision",
+                                "/api/campaign-briefs/*/activate")
+                        .hasRole("ADMIN")
+                        .pathMatchers("/api/campaign-briefs/**")
+                        .hasAnyRole("BRAND_ADVERTISER", "ADMIN")
+
+                    // =============================================
+                    // TARGET AUDIENCE
+                    // =============================================
+                        .pathMatchers(HttpMethod.GET, "/api/target-audiences/**")
+                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+                        .pathMatchers("/api/target-audiences/**")
+                        .hasAnyRole("BRAND_ADVERTISER", "ADMIN")
+
 
 
                         // =============================================

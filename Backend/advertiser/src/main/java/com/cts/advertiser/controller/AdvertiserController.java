@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +30,7 @@ public class AdvertiserController {
     private final AdvertiserService advertiserService;
 
     // POST /api/advertisers - creates a new advertiser
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PostMapping
     public ResponseEntity<ApiResponse<AdvertiserResponse>> createAdvertiser(@Valid @RequestBody AdvertiserRequest request) {
 
@@ -43,7 +42,7 @@ public class AdvertiserController {
     }
 
     // GET /api/advertisers - returns all advertisers
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<AdvertiserResponse>>> getAllAdvertisers() {
 
@@ -54,7 +53,7 @@ public class AdvertiserController {
     }
 
     // GET /api/advertisers/{id} - returns one advertiser by ID
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AdvertiserResponse>> getAdvertiserById(@PathVariable Integer id) {
 
@@ -65,7 +64,7 @@ public class AdvertiserController {
     }
 
     // PUT /api/advertisers/{id} - updates an existing advertiser
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<AdvertiserResponse>> updateAdvertiser(@PathVariable Integer id, @Valid @RequestBody AdvertiserRequest request) {
 
@@ -76,7 +75,7 @@ public class AdvertiserController {
     }
 
     // DELETE /api/advertisers/{id} - deletes an advertiser
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteAdvertiser(@PathVariable Integer id) {
 

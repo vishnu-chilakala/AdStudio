@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +36,7 @@ public class CampaignBriefController {
     private final CampaignBriefApprovalService campaignBriefApprovalService;
 
     // POST /api/campaign-briefs - creates a new campaign brief
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PostMapping
     public ResponseEntity<ApiResponse<CampaignBriefResponse>> createCampaignBrief(@Valid @RequestBody CampaignBriefRequest request) {
 
@@ -47,7 +47,7 @@ public class CampaignBriefController {
     }
 
     // GET /api/campaign-briefs - returns all campaign briefs
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<CampaignBriefResponse>>> getAllCampaignBriefs() {
 
@@ -58,7 +58,7 @@ public class CampaignBriefController {
     }
 
     // GET /api/campaign-briefs/{id} - returns one campaign brief by ID
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CampaignBriefResponse>> getCampaignBriefById(@PathVariable Integer id) {
 
@@ -69,7 +69,7 @@ public class CampaignBriefController {
     }
 
     // GET /api/campaign-briefs/brand/{brandId} - returns all campaign briefs for a specific brand
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping("/brand/{brandId}")
     public ResponseEntity<ApiResponse<List<CampaignBriefResponse>>> getAllBriefsByBrandId(@PathVariable Integer brandId) {
 
@@ -80,7 +80,7 @@ public class CampaignBriefController {
     }
 
     // PUT /api/campaign-briefs/{id} - updates an existing campaign brief
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<CampaignBriefResponse>> updateCampaignBrief(@PathVariable Integer id, @Valid @RequestBody CampaignBriefRequest request) {
 
@@ -91,7 +91,7 @@ public class CampaignBriefController {
     }
 
     // PUT /api/campaign-briefs/{id}/status - updates only the status of a campaign brief
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PutMapping("/{id}/status")
     public ResponseEntity<ApiResponse<CampaignBriefResponse>> updateCampaignBriefStatus(@PathVariable Integer id, @RequestParam String status) {
 
@@ -102,7 +102,7 @@ public class CampaignBriefController {
     }
 
     // DELETE /api/campaign-briefs/{id} - deletes a campaign brief
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteCampaignBrief(@PathVariable Integer id) {
 
@@ -115,7 +115,7 @@ public class CampaignBriefController {
     // Endpoints for Campaign Brief Approval
     
     // POST /api/campaign-briefs/{id}/submit - subimts a brief for approval
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('Admin')")
+
     @PostMapping("/{id}/submit")
     public ResponseEntity<ApiResponse<CampaignBriefResponse>> submitForApproval(@PathVariable Integer id) {
 
@@ -126,7 +126,7 @@ public class CampaignBriefController {
     }
 
     // POST /api/campaign-briefs/{id}/decision - records reviewer decision
-    @PreAuthorize("hasRole('Admin')")
+
     @PostMapping("/{id}/decision")
     public ResponseEntity<ApiResponse<CampaignBriefApprovalResponse>> makeDecision(@PathVariable Integer id, @Valid @RequestBody CampaignBriefApprovalRequest request) {
 
@@ -137,7 +137,7 @@ public class CampaignBriefController {
     }
 
     // POST /api/campaign-briefs/{id}/activate - activates an approved brief
-    @PreAuthorize("hasRole('Admin')")
+
     @PostMapping("/{id}/activate")
     public ResponseEntity<ApiResponse<CampaignBriefResponse>> activateBrief(@PathVariable Integer id) {
 
@@ -148,7 +148,7 @@ public class CampaignBriefController {
     }
 
     // GET /api/campaign-briefs/{id}/approval-history - returns approval history
-    @PreAuthorize("hasRole('AdvertiserBrand') or hasRole('MediaPlanner') or hasRole('Finance') or hasRole('Admin')")
+
     @GetMapping("/{id}/approval-history")
     public ResponseEntity<ApiResponse<List<CampaignBriefApprovalResponse>>> getApprovalHistory(@PathVariable Integer id) {
 
