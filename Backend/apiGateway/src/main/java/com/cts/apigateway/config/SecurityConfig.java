@@ -178,6 +178,17 @@ public class SecurityConfig {
                     "/api/pacing-alerts/**"
             )
             .hasAnyRole("MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+
+                        // =============================================
+                        // NOTIFICATION MODULE
+                        // - ALL AUTHENTICATED ROLES (accessible to every user type)
+                        // =============================================
+                                .pathMatchers(
+                                        "/api/notifications/**"
+                                )
+                                .hasAnyRole("ADMIN", "FINANCE_EXECUTIVE", "BRAND_ADVERTISER", "DELIVERY_PUBLISHER", "CREATIVE_MANAGER", "MEDIA_PLANNER")
+
+
                         // =============================================
                         // ALL OTHER ENDPOINTS - must be authenticated
                         // =============================================

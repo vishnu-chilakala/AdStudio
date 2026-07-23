@@ -33,7 +33,7 @@ spring:
             - id: notification
               uri: lb://notification
               predicates:
-                - Path=/api/notification/**
+                - Path=/api/notifications/**
 
 server:
   port: 9090
