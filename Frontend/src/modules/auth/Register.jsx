@@ -7,16 +7,18 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import "../../styles/auth.css";
 
 const ROLES = [
-  "Advertiser / Brand Manager",
-  "Media Planner",
-  "Creative Manager",
-  "Publisher",
-  "Finance Executive",
-  "Ad Operations Admin",
+  "BRAND_ADVERTISER",
+    "MEDIA_PLANNER",
+    "CREATIVE_MANAGER",
+    "DELIVERY_PUBLISHER",
+    "FINANCE_EXECUTIVE",
+    "ADMIN"
 ];
 
 export default function Register() {
-  const { login } = useAuth();
+  const { register } = useAuth();
+
+
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", phone: "", role: ROLES[0], password: "" });
   const [error, setError] = useState("");
@@ -33,10 +35,17 @@ export default function Register() {
     }
     setBusy(true);
     // Dummy register -> sign in (backend optional).
-    const res = await login(form.email, form.password);
+    console.log("here-------------");
+    
+    const res = await register(form.name, form.email, form.phone, form.role, form.password);
     setBusy(false);
     if (res.ok) navigate("/dashboard");
-    else setError("Could not create the account. Please try again.");
+    else{ 
+      
+        console.log("Registration failed.----------------");
+
+      setError("Could not create the account. Please try again."+res.error);
+    }
   };
 
   return (

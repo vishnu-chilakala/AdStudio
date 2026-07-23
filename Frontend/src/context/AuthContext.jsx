@@ -16,25 +16,8 @@ const AuthContext = createContext(null);
 
 const USER_KEY = "adstudio_user";
 
-function deriveRoleFromEmail(email) {
-  const e = (email || "").toLowerCase();
-  if (e.includes("publisher") || e.includes("pub")) return "Publisher";
-  if (e.includes("planner") || e.includes("media")) return "Media Planner";
-  if (e.includes("creative")) return "Creative Manager";
-  if (e.includes("finance")) return "Finance Executive";
-  if (e.includes("advertiser") || e.includes("brand")) return "Advertiser / Brand Manager";
-  if (e.includes("admin")) return "Ad Operations Admin";
-  return "Ad Operations Admin";
-}
 
-function deriveNameFromEmail(email) {
-  const local = (email || "user").split("@")[0];
-  return local
-    .split(/[._-]+/)
-    .filter(Boolean)
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
+
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
@@ -91,27 +74,47 @@ export function AuthProvider({ children }) {
       const payload = json.data || json;
       setToken(payload.token || "live-session");
       const u = payload.user || {
-        name: deriveNameFromEmail(email),
+        name: payload.name || "not fetched",
         email,
-        role: payload.role || deriveRoleFromEmail(email),
+        role: payload.role || "not fetched",
       };
       localStorage.setItem(USER_KEY, JSON.stringify(u));
       setUser(u);
       return { ok: true };
     } catch {
       // Dummy/offline login so the UI is usable without a backend.
-      const u = {
-        name: deriveNameFromEmail(email) || MOCK_USER.name,
-        email: email || MOCK_USER.email,
-        role: deriveRoleFromEmail(email),
-        accountId: MOCK_USER.accountId,
-      };
-      setToken("demo-session-token");
-      localStorage.setItem(USER_KEY, JSON.stringify(u));
-      setUser(u);
       return { ok: true, demo: true };
     }
   }, []);
+
+  /* ---- register ---- */
+const register = useCallback(async (name, email, phone, role, password) => {
+  try {
+    const res = await fetch(`${API_BASE}/${ENDPOINTS.register}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, phone, role, password }),
+    });
+    console.log("heyy pppppp ",res);
+    
+
+    if (!res.ok) throw new Error("backend registration failed");
+
+    const json = await res.json();
+    const payload = json.data || json;
+
+    setToken(payload.token);
+
+    const u = payload.user;
+    localStorage.setItem(USER_KEY, JSON.stringify(u));
+    setUser(u);
+
+    return { ok: true };
+ } catch (err) {
+    // Backend on :9090 unreachable -> surface the error instead of faking a session.
+     return { ok: false, error: err?.message || "Registration failed." };
+  }
+}, []);
 
   const logout = useCallback(() => {
     clearToken();
@@ -132,6 +135,7 @@ export function AuthProvider({ children }) {
     eligibilityLoading,
     eligibilityIsMock,
     login,
+    register,
     logout,
     isPortalAllowed,
     reloadEligibility: loadEligibility,
