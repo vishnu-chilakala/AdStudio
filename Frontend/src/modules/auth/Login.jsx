@@ -7,18 +7,20 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import "../../styles/auth.css";
 
 const ROLE_PRESETS = [
-  { label: "Admin", email: "admin@adstudio.io" },
-  { label: "Advertiser", email: "advertiser@adstudio.io" },
-  { label: "Planner", email: "planner@adstudio.io" },
-  { label: "Creative", email: "creative@adstudio.io" },
-  { label: "Finance", email: "finance@adstudio.io" },
+  
+  { label: "Admin", email: "admin@adstudio.com" },
+  { label: "Advertiser", email: "advertiser@puma.com" },
+  { label: "Publisher", email: "publisher@adstudio.com" },
+  { label: "Media-Planner", email: "mediaplanner@adstudio.com" },
+  { label: "Creative", email: "creative@adstudio.com" },
+  { label: "Finance", email: "financer@adstudio.com" },
 ];
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("ava.sinclair@adstudio.io");
-  const [password, setPassword] = useState("demo1234");
+  const [email, setEmail] = useState("admin@adstudio.com");
+  const [password, setPassword] = useState("password");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -132,7 +134,7 @@ export default function Login() {
                   key={r.label}
                   type="button"
                   className="role-chip"
-                  onClick={() => { setEmail(r.email); setPassword("demo1234"); }}
+                  onClick={() => { setEmail(r.email); setPassword("password"); }}
                 >
                   {r.label}
                 </button>

@@ -10,7 +10,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { API_BASE, ENDPOINTS } from "../api/endpoints";
 import { getToken, setToken, clearToken } from "../api/apiClient";
-import { MOCK_ELIGIBILITY, MOCK_USER } from "../data/mockData";
+import { MOCK_ELIGIBILITY } from "../data/mockData";
 
 const AuthContext = createContext(null);
 

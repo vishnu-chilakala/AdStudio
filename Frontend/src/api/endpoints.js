@@ -6,13 +6,13 @@
    otherwise each page falls back to local mock data (see hooks/useApiData).
    ============================================================ */
 
-export const API_BASE = "http://localhost:8181";
+export const API_BASE = "http://localhost:9090";
 
 export const ENDPOINTS = {
   // --- access / auth ---
   eligibilityList: "eligibilityList", // -> ["dashboard","advertiser", ...]
-  login: "auth/login",
-  register: "auth/register",
+  login: "api/auth/login",
+  register: "api/auth/register",
 
   // --- dashboard (overview) ---
   dashboardSummary: "dashboard/summary",

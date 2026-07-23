@@ -35,6 +35,7 @@ public class DataInitializer {
                         .phone("0000000000")
                         .role(Role.ADMIN)
                         .status(UserStatus.ACTIVE)
+                        .accountId(1L)
                         .build();
                 userRepository.save(admin);
                 log.warn("Seeded default ADMIN [{}] with password 'password' - CHANGE THIS IMMEDIATELY.", adminEmail);
