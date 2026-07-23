@@ -5,7 +5,6 @@ import com.cts.adstudio.finance.billing.exception.BillingRuleException;
 import com.cts.adstudio.finance.billing.service.ClientInvoiceService;
 import com.cts.adstudio.finance.shared.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +24,6 @@ public class BillingCalendarController {
 
     @GetMapping("/calendar")
     // this endpoint will show list of ISSUED transactions in that particular month
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN','BRAND_ADVERTISER')")
     public ApiResponse<List<BillingCalendarEntryResponse>> calendar(@RequestParam String month) {
         YearMonth ym;
         try {

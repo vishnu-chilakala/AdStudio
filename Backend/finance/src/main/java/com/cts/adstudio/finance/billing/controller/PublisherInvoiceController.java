@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class PublisherInvoiceController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('DELIVERY_PUBLISHER','ADMIN')")
+
     public ApiResponse<PublisherInvoiceResponse> submit(
             @Valid @RequestBody SubmitPublisherInvoiceRequest req,
             @RequestHeader(value = "X-User-Id", required = false) Long actingUserId) {
@@ -41,13 +40,13 @@ public class PublisherInvoiceController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('DELIVERY_PUBLISHER','FINANCE_EXECUTIVE','ADMIN')")
+
     public ApiResponse<PublisherInvoiceResponse> get(@PathVariable Long id) {
         return ApiResponse.ok(service.get(id));
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('DELIVERY_PUBLISHER','FINANCE_EXECUTIVE','ADMIN')")
+
     public ApiResponse<List<PublisherInvoiceResponse>> list(
             @RequestParam(required = false) Long publisherId,
             @RequestParam(required = false) PublisherInvoiceStatus status,
@@ -56,7 +55,6 @@ public class PublisherInvoiceController {
     }
 
     @PutMapping("/{id}/reconcile")
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
     public ApiResponse<ReconciliationResultResponse> reconcile(
             @PathVariable Long id,
             @RequestHeader(value = "X-User-Id", required = false) Long actingUserId) {
@@ -64,7 +62,6 @@ public class PublisherInvoiceController {
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
     public ApiResponse<PublisherInvoiceResponse> changeStatus(
             @PathVariable Long id,
             @Valid @RequestBody ChangeStatusRequest req,

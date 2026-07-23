@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class ClientInvoiceController {
 
     @PostMapping//create() → manual invoice creation
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
+
     public ApiResponse<ClientInvoiceResponse> create(
             @Valid @RequestBody CreateClientInvoiceRequest req,
             @RequestHeader(value = "Acting-User-Id-Finance", required = false) Long actingUserId) {
@@ -45,7 +44,7 @@ public class ClientInvoiceController {
 
     @PostMapping("/generate")// generate() → auto-generate invoice from delivery data
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
+
     public ApiResponse<ClientInvoiceResponse> generate(
             @Valid @RequestBody GenerateClientInvoiceRequest req,
             @RequestHeader(value = "X-User-Id", required = false) Long actingUserId) {
@@ -54,13 +53,11 @@ public class ClientInvoiceController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN','BRAND_ADVERTISER')")
     public ApiResponse<ClientInvoiceResponse> get(@PathVariable Long id) {
         return ApiResponse.ok(service.get(id));
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN','BRAND_ADVERTISER')")
     public ApiResponse<List<ClientInvoiceResponse>> list(
             @RequestParam(required = false) ClientInvoiceStatus status, // ClientInvoiceStatus - enum
             @PageableDefault(size = 20) Pageable pageable) {
@@ -68,7 +65,6 @@ public class ClientInvoiceController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
     public ApiResponse<ClientInvoiceResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateClientInvoiceRequest req,
@@ -77,7 +73,6 @@ public class ClientInvoiceController {
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN')")
     public ApiResponse<ClientInvoiceResponse> changeStatus(
             @PathVariable Long id,
             @Valid @RequestBody ChangeStatusRequest req,
@@ -87,7 +82,6 @@ public class ClientInvoiceController {
     }
 
     @GetMapping("/summary")
-    @PreAuthorize("hasAnyRole('FINANCE_EXECUTIVE','ADMIN','BRAND_ADVERTISER')")
     public ApiResponse<PaymentSummaryResponse> paymentSummary(@RequestParam Long advertiserId) {
         return ApiResponse.ok(service.paymentSummary(advertiserId), "Payment summary");
     }

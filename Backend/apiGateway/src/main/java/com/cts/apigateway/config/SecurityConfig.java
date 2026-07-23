@@ -136,6 +136,20 @@ public class SecurityConfig {
                     )
                     .hasAnyRole("DELIVERY_PUBLISHER", "ADMIN")
 
+                        // =============================================
+                        // FINANCE / CLIENT BILLING MODULE
+                        // - FINANCE_EXECUTIVE, ADMIN, BRAND_ADVERTISER
+                        // =============================================
+                                .pathMatchers("/api/invoices/**", "/api/client-invoices/**")
+                                .hasAnyRole("FINANCE_EXECUTIVE", "ADMIN", "BRAND_ADVERTISER")
+
+                        // =============================================
+                        // PUBLISHER INVOICE MODULE
+                        // - DELIVERY_PUBLISHER, FINANCE_EXECUTIVE, ADMIN
+                        // =============================================
+                                .pathMatchers("/api/publisher-invoices/**")
+                                .hasAnyRole("DELIVERY_PUBLISHER", "FINANCE_EXECUTIVE", "ADMIN")
+
 
                         // =============================================
                         // ALL OTHER ENDPOINTS - must be authenticated

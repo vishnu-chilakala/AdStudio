@@ -25,7 +25,7 @@ spring:
             - id: finance
               uri: lb://finance
               predicates:
-                - Path=/api/finance/**
+                - Path=/api/invoices/**,/api/client-invoices/**,/api/publisher-invoices/**
             - id: mediaplan
               uri: lb://mediaplan
               predicates:
