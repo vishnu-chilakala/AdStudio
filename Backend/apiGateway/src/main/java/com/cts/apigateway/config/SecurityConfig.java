@@ -150,7 +150,34 @@ public class SecurityConfig {
                                 .pathMatchers("/api/publisher-invoices/**")
                                 .hasAnyRole("DELIVERY_PUBLISHER", "FINANCE_EXECUTIVE", "ADMIN")
 
+        // =============================================
+        // MEDIA PLAN MODULE
+        // - MEDIA_PLANNER, ADMIN
+        // =============================================
+            .pathMatchers(
+                    "/api/media-plans/**",
+                    "/api/line-items/**",
+                    "/api/insertion-orders/**"
+            )
+            .hasAnyRole("MEDIA_PLANNER", "ADMIN")
 
+        // =============================================
+        // DELIVERY RECORD MODULE
+        // - DELIVERY_PUBLISHER, MEDIA_PLANNER, ADMIN
+        // =============================================
+            .pathMatchers(
+                    "/api/delivery-records/**"
+            )
+            .hasAnyRole("DELIVERY_PUBLISHER", "MEDIA_PLANNER", "ADMIN")
+
+        // =============================================
+        // PACING ALERT MODULE
+        // - MEDIA_PLANNER, FINANCE_EXECUTIVE, ADMIN
+        // =============================================
+            .pathMatchers(
+                    "/api/pacing-alerts/**"
+            )
+            .hasAnyRole("MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
                         // =============================================
                         // ALL OTHER ENDPOINTS - must be authenticated
                         // =============================================
